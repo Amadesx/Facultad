@@ -28,3 +28,35 @@ echo "El mes con mayor ganancia fue el mes número " . $mesMayorGanancia . " con
 ?>
 
 
+
+
+
+// Ejercicio 2
+// Ejemplo de arreglo de empleados
+$empleados = array(
+    array('nombre' => 'Juan Perez', 'sueldo' => 2000, 'antiguedad' => 5),
+    array('nombre' => 'Maria Garcia', 'sueldo' => 2500, 'antiguedad' => 12),
+    array('nombre' => 'Pedro Rodriguez', 'sueldo' => 3000, 'antiguedad' => 8)
+);
+
+// Arreglo para almacenar los sueldos de cada empleado
+$sueldos_cobrar = array();
+
+// Calcular sueldo a cobrar para cada empleado
+foreach ($empleados as $empleado) {
+    $sueldo_cobrar = $empleado['sueldo'];
+    if ($empleado['antiguedad'] > 10) {
+        $sueldo_cobrar += $empleado['sueldo'] * 0.5;
+    } else {
+        $sueldo_cobrar += $empleado['sueldo'] * 0.25;
+    }
+    // Agregar nombre del empleado y sueldo a cobrar al arreglo correspondiente
+    $sueldos_cobrar[$empleado['nombre']] = $sueldo_cobrar;
+}
+
+// Imprimir arreglo con los sueldos a cobrar de cada empleado
+print_r($sueldos_cobrar);
+?>
+
+
+
