@@ -1,55 +1,67 @@
 <?php
-
-// Definir la estructura del arreglo asociativo
+// Declaración del arreglo asociativo
 $arregloFavorito = array(
-    array('nrolegajo' => 123, 'codigoMateria' => 'MAT123', 'notaObtenida' => 7),
-    array('nrolegajo' => 456, 'codigoMateria' => 'MAT123', 'notaObtenida' => 8),
-    array('nrolegajo' => 789, 'codigoMateria' => 'FIS456', 'notaObtenida' => 9),
-    array('nrolegajo' => 101, 'codigoMateria' => 'FIS456', 'notaObtenida' => 7),
-    array('nrolegajo' => 102, 'codigoMateria' => 'FIS456', 'notaObtenida' => 8),
-    array('nrolegajo' => 103, 'codigoMateria' => 'FIS456', 'notaObtenida' => 6)
+  array("nrolegajo" => 1234, "codigoMateria" => "MAT001", "notaObtenida" => 8),
+  array("nrolegajo" => 5678, "codigoMateria" => "MAT001", "notaObtenida" => 7),
+  array("nrolegajo" => 1234, "codigoMateria" => "FIS001", "notaObtenida" => 9),
+  array("nrolegajo" => 5678, "codigoMateria" => "FIS001", "notaObtenida" => 6),
+  array("nrolegajo" => 9101, "codigoMateria" => "MAT001", "notaObtenida" => 9),
+  array("nrolegajo" => 9101, "codigoMateria" => "FIS001", "notaObtenida" => 7),
 );
 
-// Función para obtener la cantidad de alumnos que rindieron una determinada materia
-function cantidadAlumnosMateria($arreglo, $materia) {
-    $cantidad = 0;
-    foreach ($arreglo as $valor) {
-        if ($valor['codigoMateria'] == $materia) {
-            $cantidad++;
-        }
+// Función para obtener la cantidad de alumnos que rindieron una materia
+function cantidadAlumnos($arregloFavorito, $materia) {
+  $cantidad = 0;
+  foreach ($arregloFavorito as $valor) {
+    if ($valor["codigoMateria"] == $materia) {
+      $cantidad++;
     }
-    return $cantidad;
+  }
+  return $cantidad;
 }
 
 // Función para obtener el porcentaje de alumnos que rindieron cada materia
-function porcentajeAlumnosMateria($arreglo) {
-    $materias = array_unique(array_column($arreglo, 'codigoMateria'));
-    $porcentajes = array();
-    foreach ($materias as $materia) {
-        $cantidad = cantidadAlumnosMateria($arreglo, $materia);
-        $porcentaje = round($cantidad / count($arreglo) * 100, 2);
-        $porcentajes[$materia] = $porcentaje;
-    }
-    return $porcentajes;
+function porcentajeAlumnos($arregloFavorito) {
+  $materias = array_unique(array_column($arregloFavorito, 'codigoMateria'));
+  $resultado = array();
+  foreach ($materias as $materia) {
+    $cantidad = cantidadAlumnos($arregloFavorito, $materia);
+    $porcentaje = $cantidad / count($arregloFavorito) * 100;
+    $resultado[$materia] = $porcentaje;
+  }
+  return $resultado;
 }
 
-// Función para obtener la información del alumno que mayor nota obtuvo por cada materia
-function mejorAlumnoMateria($arreglo) {
-    $mejores = array();
-    $materias = array_unique(array_column($arreglo, 'codigoMateria'));
-    foreach ($materias as $materia) {
-        $mayorNota = 0;
-        foreach ($arreglo as $valor) {
-            if ($valor['codigoMateria'] == $materia && $valor['notaObtenida'] > $mayorNota) {
-                $mayorNota = $valor['notaObtenida'];
-                $mejorAlumno = $valor['nrolegajo'];
-            }
-        }
-        $mejores[$materia] = $mejorAlumno;
+// Función para obtener la información del alumno que obtuvo la mayor nota por cada materia
+function mayorNota($arregloFavorito) {
+  $materias = array_unique(array_column($arregloFavorito, 'codigoMateria'));
+  $resultado = array();
+  foreach ($materias as $materia) {
+    $notas = array();
+    foreach ($arregloFavorito as $valor) {
+      if ($valor["codigoMateria"] == $materia) {
+        array_push($notas, $valor["notaObtenida"]);
+      }
     }
-    return $mejores;
+    $mayorNota = max($notas);
+    foreach ($arregloFavorito as $valor) {
+      if ($valor["codigoMateria"] == $materia && $valor["notaObtenida"] == $mayorNota) {
+        $resultado[$materia] = $valor;
+      }
+    }
+  }
+  return $resultado;
 }
 
-// Ejemplos de uso de las funciones
-echo 'Cantidad de alumnos que rindieron MAT123: ' . cantidadAlumnosMateria($arregloFavorito, 'MAT123') . '<br>';
-echo 'Porcentaje de alumnos que rindieron cada materia
+// Función para obtener la cantidad de alumnos que aprobaron una materia con nota mayor o igual a 7
+function cantidadAprobados($arregloFavorito, $materia) {
+  $cantidad = 0;
+  foreach ($arregloFavorito as $valor) {
+    if ($valor["codigoMateria"] == $materia && $valor["notaObtenida"] >= 7) {
+      $cantidad++;
+    }
+  }
+  return $cantidad;
+}
+
+//
