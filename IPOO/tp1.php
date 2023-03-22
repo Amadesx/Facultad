@@ -150,6 +150,76 @@ public function toString(){
     return "numero 1: " .$this->num1. "numero 2: " .$this->num2;
 }
 }
-$numero= new Calculadora(1,3);
-$numero->sumar();
-echo "$numero";
+
+
+//Ejercio 12
+class Linea{
+    private $pA;
+    private $pB;
+    private $pC;
+    private $pD;
+public function __construct($xA, $yA, $xB, $yB, $xC, $yC, $xD, $yD){
+    $this->pA = array($xA, $yA);
+    $this->pB = array($xB, $yB);
+    $this->pC = array($xC, $yC);
+    $this->pD = array($xD, $yD);
+}
+public function getpA(){
+    return $this->pA;
+}
+public function getpB(){
+    return $this->pB;
+}
+public function getpC(){
+    return $this->pC;
+}
+public function getpD(){
+    return $this->pD;
+}
+public function mueveDerecha($d){
+    $this->pA[0]+= $d;
+    $this->pB[0]+= $d;
+    $this->pC[0]+= $d;
+    $this->pD[0]+= $d;
+}
+public function mueveIzquierda($d){
+    $this->pA[0]-= $d;
+    $this->pB[0]-= $d;
+    $this->pC[0]-= $d;
+    $this->pD[0]-= $d;
+}
+public function mueveArriba($d){
+    $this->pA[1]+= $d;
+    $this->pB[1]+= $d;
+    $this->pC[1]+= $d;
+    $this->pD[1]+= $d;
+}
+public function mueveAbajo($d){
+    $this->pA[1]-= $d;
+    $this->pB[1]-= $d;
+    $this->pC[1]-= $d;
+    $this->pD[1]-= $d;
+}
+public function __toString(){
+    return "pA: (". $this->pA[0] . ", ". $this->pA[1] . ")".
+    "pA: (". $this->pB[0] . ", ". $this->pB[1] . ")".
+    "pA: (". $this->pC[0] . ", ". $this->pC[1] . ")".
+    "pA: (". $this->pD[0] . ", ". $this->pD[1] . ")";
+}
+}
+$linea = new Linea(1,2,3,4,5,6,7,8);
+echo "Linea original: " .$linea. "\n";
+$linea->mueveDerecha(2);
+$linea->mueveAbajo(3);
+echo "linea movieda: " .$linea. "\n";
+
+
+
+
+//Ejercicio 13
+class Cafereta{
+    private $capacidadMaxima;
+    private $cantidadActual;
+
+}
+}
