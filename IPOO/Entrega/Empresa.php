@@ -145,28 +145,8 @@ class Empresa{
     public function eliminar(){
         $base = new BaseDatos();
         $respuesta = false;
-        
-        // Obtener todos los viajes relacionados con la empresa
-        $consultaViajes = "SELECT idviaje FROM viaje WHERE idempresa = {$this->getIdempresa()}";
+        $consultaElimina = "DELETE FROM empresa WHERE idempresa = {$this->getIdempresa()}";
         if($base->Iniciar()){
-            $resultado = $base->Ejecutar($consultaViajes);
-            if($resultado){
-                // Eliminar cada viaje relacionado
-                while($fila = $base->Registro()){
-                    $viaje = new Viaje();
-                    $viaje->setIdviaje($fila['idviaje']);
-                    if(!$viaje->eliminar()){
-                        $this->setMensajeOp($viaje->getMensajeOp());
-                        return $respuesta;
-                    }
-                }
-            }else{
-                $this->setMensajeOp($base->getError());
-                return $respuesta;
-            }
-            
-            // Una vez eliminados los viajes, eliminar la empresa
-            $consultaElimina = "DELETE FROM empresa WHERE idempresa = {$this->getIdempresa()}";
             if($base->Ejecutar($consultaElimina)){
                 $respuesta = true;
             }else{
@@ -175,9 +155,9 @@ class Empresa{
         }else{
             $this->setMensajeOp($base->getError());
         }
-        
         return $respuesta;
     }
-    
+
+
     
 }
