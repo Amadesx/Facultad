@@ -111,32 +111,49 @@ function opcionesViaje()
                 }
                 break;
 
-            case '4':
-                //eliminar viaje
-                echo "para eliminar un viaje no debe tener pasajeros almacenados \n";
-                echo "precione 1 para continuar, 2 para salir\n";
-                $opcion = trim(fgets(STDIN));
-                if ($opcion == "1") {
-                echo "Ingrese el número de viaje: \n";
-                $idViaje = intval(trim(fgets(STDIN)));
-                $objViaje = new Viaje();
-                if ($objViaje->buscar($idViaje)) {
-                    if($objViaje->eliminar()){
-                        echo "El viaje se ha eliminado correctamente.\n";
-                    }else{
-                        echo "El viaje no ha podido eliminarse.\n";
-                        echo $objViaje->getMensajeOp();
+                case '4':
+                    echo "Para eliminar un viaje, se eliminarán todos los pasajeros asociados.\n";
+                    echo "Presione 1 para continuar, 2 para salir.\n";
+                    $opcion = trim(fgets(STDIN));
+                
+                    if ($opcion == "1") {
+                        echo "Ingrese el número de viaje: \n";
+                        $idViaje = intval(trim(fgets(STDIN)));
+                
+                        $objViaje = new Viaje();
+                        if ($objViaje->buscar($idViaje)) {
+                            // Obtener lista de pasajeros del viaje
+                            $condicion = "idviaje = " . $idViaje;
+                            $arregloPasajeros = Pasajero::listar($condicion);
+                
+                            if (!empty($arregloPasajeros)) {
+                                // Eliminar cada pasajero del viaje
+                                foreach ($arregloPasajeros as $pasajero) {
+                                    if ($pasajero->eliminar()) {
+                                        echo "Pasajero eliminado: " . $pasajero->__toString() . "\n";
+                                    } else {
+                                        echo "No se pudo eliminar el pasajero: " . $pasajero->__toString() . "\n";
+                                    }
+                                }
+                            }
+                
+                            // Eliminar el viaje
+                            if ($objViaje->eliminar()) {
+                                echo "El viaje se ha eliminado correctamente.\n";
+                            } else {
+                                echo "El viaje no ha podido eliminarse.\n";
+                                echo $objViaje->getMensajeOp();
+                            }
+                        } else {
+                            echo "No se encontró dicho viaje.\n";
+                        }
+                    } elseif ($opcion == "2") {
+                        break;
+                    } else {
+                        echo "Opción inválida.\n";
                     }
-                } else {
-                    echo "No se encontró dicho viaje.\n";
-                }
-                break;
-            } elseif ($opcion == "2") {
-                break;
-            } else {
-                echo "Opción inválida.\n";
-            }
-            break;
+                    break;
+                
 
                 case '5':
                     //crear viaje 
