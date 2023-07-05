@@ -259,43 +259,22 @@ class Viaje
         return $respuesta;
     }
 
-    public function eliminar()
-    {
+    public function eliminar(){
         $base = new BaseDatos();
         $respuesta = false;
-
-        // Obtener todos los pasajeros relacionados con el viaje
-        $consultaPasajeros = "SELECT rdocumento FROM pasajero WHERE idviaje = {$this->getIdviaje()}";
-        if ($base->Iniciar()) {
-            $resultadoPasajeros = $base->Ejecutar($consultaPasajeros);
-            if ($resultadoPasajeros) {
-                // Eliminar cada pasajero relacionado
-                while ($filaPasajero = $base->Registro()) {
-                    $pasajero = new Pasajero();
-                    $pasajero->setRdocumento($filaPasajero['rdocumento']);
-                    if (!$pasajero->eliminar()) {
-                        $this->setMensajeOp($pasajero->getMensajeOp());
-                        return $respuesta;
-                    }
-                }
-            } else {
-                $this->setMensajeOp($base->getError());
-                return $respuesta;
-            }
-
-            // Una vez eliminados los pasajeros, eliminar el viaje
-            $consultaElimina = "DELETE FROM viaje WHERE idviaje = {$this->getIdviaje()}";
-            if ($base->Ejecutar($consultaElimina)) {
+        $consultaElimina = "DELETE FROM viaje WHERE idviaje = {$this->getIdviaje()}";
+        if($base->Iniciar()){
+            if($base->Ejecutar($consultaElimina)){
                 $respuesta = true;
-            } else {
+            }else{
                 $this->setMensajeOp($base->getError());
             }
-        } else {
+        }else{
             $this->setMensajeOp($base->getError());
         }
-
         return $respuesta;
     }
-
+    
 
 }
+
