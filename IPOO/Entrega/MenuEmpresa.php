@@ -68,44 +68,60 @@ function opciontesEmpresa()
                 }
                 break;
 
-            case '4':
-                //eliminar empresa
-                echo "para eliminar una empresa, si eliminas esta empresa se van a borrar todos sus viajes relacionados \n";
-                echo "precione 1 para continuar, 2 para salir\n";
-                $opcion = trim(fgets(STDIN));
-                if ($opcion == "1") {
-                    $arregloEmpresas = Empresa::listar();
-                    if (count($arregloEmpresas) == 0) {
-                        echo "No hay empresas cargadas.\n";
-                    } else {
-                        //print_r($arregloEmpresas);
-                        $lista = "";
-                        foreach ($arregloEmpresas as $key => $empresa) {
-                            $strEmpresa = $empresa->__toString();
-                            $lista .= $strEmpresa;
+                case '4':
+                    echo "Para eliminar una empresa, se borrarán todos sus viajes relacionados.\n";
+                    echo "Presione 1 para continuar, 2 para salir.\n";
+                    $opcion = trim(fgets(STDIN));
+                
+                    if ($opcion == "1") {
+                        $arregloEmpresas = Empresa::listar();
+                        if (count($arregloEmpresas) == 0) {
+                            echo "No hay empresas cargadas.\n";
+                        } else {
+                            $lista = "";
+                            foreach ($arregloEmpresas as $key => $empresa) {
+                                $strEmpresa = $empresa->__toString();
+                                $lista .= $strEmpresa;
+                            }
+                            echo $lista;
                         }
-                        echo $lista;
-                    }
-                    echo "Ingrese el número de empresa: \n";
-                    $idempresa = intval(trim(fgets(STDIN)));
-                    $objEmpresa = new Empresa();
-                    if ($objEmpresa->buscar($idempresa)) {
-                        if($objEmpresa->eliminar()){
-                            echo "La empresa se ha eliminado.\n";
-                        }else{
-                            echo "La empresa no se ha podido eliminar.\n";
-                            echo $objEmpresa->getMensajeOp();
+                
+                        echo "Ingrese el número de empresa: \n";
+                        $idempresa = intval(trim(fgets(STDIN)));
+                
+                        $objEmpresa = new Empresa();
+                        if ($objEmpresa->buscar($idempresa)) {
+                            $condicion = "idempresa = " . $idempresa;
+                            $arregloViajes = Viaje::listar($condicion);
+                
+                            if (!empty($arregloViajes)) {
+                                foreach ($arregloViajes as $viaje) {
+                                    if ($viaje->eliminar()) {
+                                        echo "Viaje eliminado: " . $viaje->__toString() . "\n";
+                                    } else {
+                                        echo "No se pudo eliminar el viaje: " . $viaje->__toString() . "\n";
+                                    }
+                                }
+                            }
+                
+                            if ($objEmpresa->eliminar()) {
+                                echo "La empresa se ha eliminado.\n";
+                            } else {
+                                echo "La empresa no se ha podido eliminar.\n";
+                                echo $objEmpresa->getMensajeOp();
+                            }
+                        } else {
+                            echo "No existe la empresa.\n";
                         }
+                
+                        break;
+                
+                    } elseif ($opcion == "2") {
+                        break;
                     } else {
-                        echo "No existe la empresa.\n";
+                        echo "Opción inválida.\n";
                     }
-                    break;
-                } elseif ($opcion == "2") {
-                    break;
-                } else {
-                    echo "Opción inválida.\n";
-                }
-                break;
+                
             case '5':
                 //cargar empresa
                 $quedar = true;
